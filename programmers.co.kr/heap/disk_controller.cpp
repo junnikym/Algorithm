@@ -21,20 +21,22 @@ int solution(vector<vector<int>> jobs) {
     
     sort(jobs.begin(), jobs.end());
     
-    while( !pq.empty() || append_i < jobs.size() ) {
-        if( jobs[append_i][0] <= wait && append_i < jobs.size() ) {
-            pq.push(jobs[append_i++]);
+    while( append_i < jobs.size() || !pq.empty() ) {
+        
+        if( append_i < jobs.size() && jobs[append_i][0] <= wait ) {
+            pq.push( jobs[append_i] );
+            append_i++;
             
             continue;
         }
         
-        if(pq.empty()) {
-            wait = jobs[append_i][0];
+        if( !pq.empty() ) {
+            wait += pq.top().at(1);
+            answer += wait - pq.top().at(0);
+            pq.pop();
         }
         else {
-            wait += pq.top()[1];
-            answer += wait - pq.top()[0];
-            pq.pop();
+            wait = jobs[append_i][0];
         }
     }
 
