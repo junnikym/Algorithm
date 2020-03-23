@@ -2,8 +2,6 @@
 #include <vector>
 #include <deque>
 
-#include <iostream>
-
 using namespace std;
 
 vector<int> solution(vector<string> operations) {
@@ -11,10 +9,15 @@ vector<int> solution(vector<string> operations) {
     deque<int> dq;
     int num = 0;
     
-    dq.push_back( stoi( (*operations.begin()).substr(2) ) );
-    for( auto it = operations.begin()+1; it != operations.end(); it++ ) {
-        if( (*it)[0] == 'I' ) {
+    for( auto it = operations.begin(); it != operations.end(); it++ ) {
+        
+        if( (*it)[0] == 'I' ) {         
             num = stoi( (*it).substr(2) );
+            
+            if(dq.empty()) {
+                dq.push_back(num);
+                continue;
+            }
             
             if( num < *dq.begin() ) 
                 dq.push_front(num);
@@ -31,10 +34,9 @@ vector<int> solution(vector<string> operations) {
                 }
             }
         }
-            
         else {
             if( !dq.empty() ) {
-                if( (*it)[3] == 1 )     // delete max value
+                if( (*it)[2] == '1' )     // delete max value
                     dq.pop_back();
                 else                    // delete min value
                     dq.pop_front();
@@ -46,10 +48,6 @@ vector<int> solution(vector<string> operations) {
         answer = {0, 0};
     else
         answer = {dq.back(), dq.front()};
-    
-    for(auto dq_it : dq) {
-        cout << dq_it << ", ";
-    }
     
     return answer;
 }
